@@ -25,3 +25,12 @@ app.post('/users', (req, res) => {
   console.log(`New user created: ${newUser}`);
   res.json({ message: 'User added successfully', user: newUser });
 });
+
+app.get('/greet', (req, res) => {
+  res.send(`Hello, developer! Welcome to my server!`);
+});
+
+app.post('/greet', (req, res) => {
+  const { name, favouriteColour } = req.body;
+  res.send(`Hello, ${name}! Your favourite colour is ${favouriteColour}. Welcome to my server!`);
+});
