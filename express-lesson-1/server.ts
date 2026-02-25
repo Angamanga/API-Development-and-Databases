@@ -19,3 +19,9 @@ app.get('/users', (req, res) => {
   ];
   res.json(users);
 });
+
+app.post('/users', (req, res) => {
+  const newUser = req.body;
+  console.log(`New user created: ${newUser}`);
+  res.json({ message: 'User added successfully', user: newUser });
+});
