@@ -12,7 +12,7 @@ const port = 3000;
 
 app.use(express.json());
 
-const recipes: Recipe[] = [
+let recipes: Recipe[] = [
   {
     id: 1,
     name: 'Smoothie',
@@ -93,6 +93,24 @@ app.put('/recipes/:id', (req, res) => {
   res.json({
     message: 'Yay, recipe updated successfully',
     recipe
+  });
+});
+
+// Delete a recipe by ID
+app.delete('/recipes/:id', (req, res) => {
+  const recipeId = Number(req.params.id);
+  const recipeToDelete = recipes.find((item) => item.id === recipeId);
+
+  // If no recipe is found to delete, return a 404 error
+  if (!recipeToDelete) {
+    return res.status(404).json({ message: 'Hmmm, the recipe you want to delete was not found! Check the ID again!' });
+  }
+  // Otherwise, filter out the recipe to delete from the recipes array
+  recipes = recipes.filter((item) => item.id !== recipeId);
+
+  res.json({
+    message: 'Recipe deleted successfully',
+    recipe: recipeToDelete
   });
 });
 
