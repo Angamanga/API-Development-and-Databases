@@ -10,6 +10,8 @@ type Recipe = {
 const app = express();
 const port = 3000;
 
+app.use(express.json());
+
 const recipes: Recipe[] = [
   {
     id: 1,
@@ -52,6 +54,25 @@ app.get('/recipes/:id', (req, res) => {
   }
 
   res.json(recipe);
+});
+
+// Add a new recipe
+app.post('/recipes', (req, res) => {
+  const { name, cuisine, prepTime } = req.body;
+
+  const newRecipe: Recipe = {
+    id: recipes.length + 1,
+    name,
+    cuisine,
+    prepTime
+  };
+
+  recipes.push(newRecipe);
+
+  res.status(201).json({
+    message: 'Recipe created successfully',
+    recipe: newRecipe
+  });
 });
 
 app.listen(port, () => {
