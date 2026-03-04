@@ -37,8 +37,21 @@ const recipes: Recipe[] = [
   }
 ];
 
+// Getting all recipes
 app.get('/recipes', (req, res) => {
   res.json(recipes);
+});
+
+// Getting a recipe by ID
+app.get('/recipes/:id', (req, res) => {
+  const recipeId = Number(req.params.id);
+  const recipe = recipes.find((item) => item.id === recipeId);
+  
+  if (!recipe) {
+    return res.status(404).json({ message: 'Oh no, the recipe was not found!' });
+  }
+
+  res.json(recipe);
 });
 
 app.listen(port, () => {
