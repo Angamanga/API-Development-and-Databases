@@ -75,6 +75,27 @@ app.post('/recipes', (req, res) => {
   });
 });
 
+// Update a recipe by ID
+app.put('/recipes/:id', (req, res) => {
+  const recipeId = Number(req.params.id);
+  const recipe = recipes.find((item) => item.id === recipeId);
+
+  if (!recipe) {
+    return res.status(404).json({ message: 'Oh no, the recipe you want to update was not found! Check the ID again!' });
+  }
+
+  const { name, cuisine, prepTime } = req.body;
+
+  recipe.name = name || recipe.name;
+  recipe.cuisine = cuisine || recipe.cuisine;
+  recipe.prepTime = prepTime || recipe.prepTime;
+
+  res.json({
+    message: 'Yay, recipe updated successfully',
+    recipe
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
