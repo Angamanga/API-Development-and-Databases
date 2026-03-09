@@ -20,7 +20,6 @@ export default defineConfig([
       "prefer-template": "warn",
       "no-unneeded-ternary": "warn",
       "capitalized-comments": "warn",
-
     },
   },
 ]);
