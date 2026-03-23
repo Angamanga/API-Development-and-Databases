@@ -24,6 +24,18 @@ CREATE TABLE scores (
     FOREIGN KEY (player_id) REFERENCES players(id),
     FOREIGN KEY (game_id) REFERENCES games(id)
 );
+
+// if a player is allowed to play each game more than once, one can assign the primary key in another way. I thought only the highscore was allowed but now when I work on the Node.js & Express with PostgreSQL assignment I realised maybe that was not the idea.
+
+CREATE TABLE scores (
+    player_id INTEGER,
+    game_id INTEGER,
+    score INTEGER,
+    date_played DATE,
+    id SERIAL PRIMARY KEY,
+    FOREIGN KEY (player_id) REFERENCES players(id),
+    FOREIGN KEY (game_id) REFERENCES games(id)
+);
 ```
 
 ## Task 1: List all players and their scores
