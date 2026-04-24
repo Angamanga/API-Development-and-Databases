@@ -8,12 +8,20 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint": "eslint"
   },
   "dependencies": {
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "jiti": "^2.6.1",
     "nodemon": "^3.1.14",
     "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "globals": "^17.5.0",
+    "typescript-eslint": "^8.58.2"
   }
 }
