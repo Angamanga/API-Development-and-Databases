@@ -1,24 +1,38 @@
 import express from "express";
 import pg from "pg";
 import dotenv from "dotenv";
-
+import { z } from "zod";
 dotenv.config();
 
 const app = express();
+const envSchema = z.object({
+  DB_USER: z.string(),
+  DB_HOST: z.string(),
+  DB_NAME: z.string(),
+  DB_PASSWORD: z.string(),
+  DB_PORT: z.string().optional(),
+});
 
+const validatedEnv = envSchema.safeParse(process.env);
+
+if (!validatedEnv.success) {
+  console.error("Invalid environment variables:", z.treeifyError(validatedEnv.error));
+  process.exit(1);
+}
+const { DB_USER, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT } = validatedEnv.data;
 const pool = new pg.Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: DB_USER,
+  host: DB_HOST,
+  database: DB_NAME,
+  password: DB_PASSWORD,
+  port: DB_PORT,
 });
 
 app.get("/", async (req, res) => {
   res.send("Welcome to my game-studio!");
 });
 
-// Endpoint: GET /players-scores 
+// Endpoint: GET /players-scores
 app.get("/players-scores", async (req, res) => {
   try {
     const sqlQuery = `
@@ -30,7 +44,11 @@ app.get("/players-scores", async (req, res) => {
     const result = await pool.query(sqlQuery);
     res.json(result.rows);
   } catch (error) {
-    res.status(500).send(error.message);
+    if(error instanceof Error) {
+      res.status(500).send(error.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
@@ -50,7 +68,11 @@ app.get("/top-players", async (req, res) => {
     const result = await pool.query(sqlQuery);
     res.json(result.rows);
   } catch (error) {
-    res.status(500).send(error.message);
+    if(error instanceof Error) {
+      res.status(500).send(error.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
@@ -65,7 +87,11 @@ app.get("/inactive-players", async (req, res) => {
     const result = await pool.query(query);
     res.json(result.rows);
   } catch (error) {
-    res.status(500).send(error.message);
+    if(error instanceof Error) {
+      res.status(500).send(error.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
@@ -80,7 +106,11 @@ app.get("/recent-players", async (req, res) => {
     const result = await pool.query(query);
     res.json(result.rows);
   } catch (error) {
-    res.status(500).send(error.message);
+    if(error instanceof Error) {
+      res.status(500).send(error.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
@@ -104,7 +134,11 @@ app.get("/favorite-games", async (req, res) => {
     res.json(result.rows);
 
   } catch (error) {
-    res.status(500).send(error.message);
+    if(error instanceof Error) {
+      res.status(500).send(error.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
