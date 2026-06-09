@@ -28,6 +28,31 @@ app.get("/userlanguages", async (_req, res) => {
   }
 });
 
+app.get("/userlanguages/:language", async (req, res) => {
+  try {
+    const { language } = req.params;
+    const users = await prisma.$queryRaw`
+      SELECT *
+      FROM "User"
+      WHERE EXISTS (
+        SELECT 1
+        FROM unnest("languages") AS language
+        WHERE lower(language) = lower(${language})
+      )
+    `;
+
+    res.json(users);
+  } catch (error) {
+    if(error instanceof Error) {
+      console.error("Oh no! I failed to fetch users by language:", error.message);
+      res.status(500).json({ error: "Oh no! I failed to fetch users by language" });
+    } else {
+      console.error("Oh no! I failed to fetch users by language due to an unknown error:", error);
+      res.status(500).json({ error: "Oh no! I failed to fetch users by language due to an unknown error" });
+    }
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
