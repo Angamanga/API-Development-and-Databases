@@ -78,6 +78,28 @@ app.put("/userlanguages/:email", async (req, res) => {
   }
 });
 
+app.delete("/userlanguages", async (_req, res) => {
+  try {
+    const deletedUsers = await prisma.user.deleteMany({
+      where: {
+        age: {
+          lt: 18,
+        },
+      },
+    });
+
+    res.json({ deletedUsers: deletedUsers.count });
+  } catch (error) {
+    if(error instanceof Error) {
+      console.error("Oops, I failed to delete users under 18:", error.message);
+      res.status(500).json({ error: "Oops, I failed to delete users under 18" });
+    } else {
+      console.error("Oops, I failed to delete users under 18 due to an unknown error:", error);
+      res.status(500).json({ error: "Oops, I failed to delete users under 18 due to an unknown error" });
+    }
+  }
+});
+
 
 app.get("/userlanguages/:language", async (req, res) => {
   try {
