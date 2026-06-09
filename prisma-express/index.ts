@@ -52,6 +52,32 @@ app.post("/userlanguages", async (req, res) => {
     }
   }
 });
+app.put("/userlanguages/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    const { languages } = req.body;
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        languages,
+      },
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    if(error instanceof Error) {
+      console.error("Oops, I failed to update a user:", error.message);
+      res.status(500).json({ error: "Oops, I failed to update a user" });
+    } else {
+      console.error("Oops, I failed to update a user due to an unknown error:", error);
+      res.status(500).json({ error: "Oops, I failed to update a user due to an unknown error" });
+    }
+  }
+});
+
 
 app.get("/userlanguages/:language", async (req, res) => {
   try {
