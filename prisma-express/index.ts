@@ -28,6 +28,31 @@ app.get("/userlanguages", async (_req, res) => {
   }
 });
 
+app.post("/userlanguages", async (req, res) => {
+  try {
+    const { name, email, languages, age } = req.body;
+
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        languages,
+        age,
+      },
+    });
+    res.status(201).json(newUser);
+    
+  } catch (error) {
+    if(error instanceof Error) {
+      console.error(":( I failed to create a user:", error.message);
+      res.status(500).json({ error: ":( I failed to create a user" });
+    } else {
+      console.error(":( I failed to create a user due to an unknown error:", error);
+      res.status(500).json({ error: ":( I failed to create a user due to an unknown error" });
+    }
+  }
+});
+
 app.get("/userlanguages/:language", async (req, res) => {
   try {
     const { language } = req.params;
